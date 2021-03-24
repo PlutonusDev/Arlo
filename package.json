@@ -1,0 +1,17 @@
+{
+  "name": "Azure",
+  "version": "1.0.0",
+  "description": "A powerful Discord bot with a bundled webpanel.",
+  "main": "src/app.js",
+  "repository": "https://github.com/PlutonusDev/Azure",
+  "author": "PlutonusDev",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "discord.js": "^12.5.1",
+    "express": "^4.17.1",
+    "get-caller-file": "^2.0.5",
+    "moment": "^2.29.1",
+    "mongoose": "^5.12.2"
+  }
+}

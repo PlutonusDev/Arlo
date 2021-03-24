@@ -1,0 +1,12 @@
+module.exports = {
+    // Database Settings
+    database: {
+        host: "mongodb://localhost/Azure"
+    },
+
+    // Discord Bot Settings
+    discord: {
+        token: "",
+        prefix: "a;"
+    }
+}
