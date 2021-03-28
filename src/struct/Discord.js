@@ -16,6 +16,7 @@ module.exports = class client extends EventEmitter {
         this.categories = [];
         this.commands = new this.discord.Collection();
         this.cooldowns = new this.discord.Collection();
+        this.database = false;
 
         this.client.once("ready", () => this.emit("ready"));
 
@@ -75,5 +76,10 @@ module.exports = class client extends EventEmitter {
         await this.load();
         await this.client.login(this.config.token).catch(e => this.emit("error", e));
         this.emit("info", `Took ~${process.uptime().toFixed(2)}s to start.`)
+    }
+
+    allocDB(connection) {
+        this.database = connection;
+        this.emit("info", "Reference to database received.")
     }
 }

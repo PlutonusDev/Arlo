@@ -12,6 +12,7 @@ const init = async () => {
 
     const db = new Database(config.database);
     db.on("ready", () => Logger.log("Database connected!"));
+    db.on("info", m => Logger.log(`[${chalk.blue("DATABASE")}] ${m}`));
     db.on("error", e => new Error({ name: "Database Error", info: e.message }));
 
     const bot = new Discord(config.discord);
@@ -22,6 +23,8 @@ const init = async () => {
 
     db.connect();
     bot.connect();
+
+    bot.allocDB(db.connection);
 }
 
 init();

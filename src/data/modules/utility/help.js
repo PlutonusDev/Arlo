@@ -1,6 +1,7 @@
 module.exports = {
     name: "help",
     aliases: [ "cmds", "commands" ],
+    usage: [ "help", "help <Command>" ],
     description: "View commands or help for a specific command.",
     disabled: false,
 
@@ -33,7 +34,7 @@ module.exports = {
                         name: "Command Help",
                         icon_url: ""
                     },
-					description: `\`\`\`asciidoc\nCommand${" ".repeat(longest-7)} :: ${command.file.name}\nCategory${" ".repeat(longest-8)} :: ${command.category}\nCooldown${" ".repeat(longest-8)} :: ${command.file.cooldown ? `${command.file.cooldown} Seconds` : "3 Seconds"}\n\n[ Usage ]\n${command.file.usage || "Not Specified"}\n\n[ Description ]\n${command.file.description}\`\`\``
+					description: `\`\`\`asciidoc\nCommand${" ".repeat(longest-7)} :: ${command.file.name}\nCategory${" ".repeat(longest-8)} :: ${command.category}\nCooldown${" ".repeat(longest-8)} :: ${command.file.cooldown ? `${command.file.cooldown} Seconds` : "3 Seconds"}\n\n[ Usage ]\n${command.file.usage ? azure.config.prefix+command.file.usage.join("\n"+azure.config.prefix) : "Not Specified"}\n\n[ Description ]\n${command.file.description}\`\`\``
                 }});
 			} else {
 				return msg.channel.send(msg.author, {embed:{
