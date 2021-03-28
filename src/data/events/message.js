@@ -5,6 +5,7 @@ module.exports = (azure, msg) => {
 
     if (azure.commands.has(cmd) || azure.commands.find((c) => c.file.aliases.includes(cmd))) {
         const args = msg.content.slice(azure.config.prefix.length).split(/ +/);
+        args.shift();
         const command = azure.commands.get(cmd) || (c.file.aliases && azure.commands.find((c) => c.file.aliases.includes(cmd)));
 
         if(command.file.disabled) return msg.channel.send({embed:{
@@ -46,7 +47,7 @@ module.exports = (azure, msg) => {
         }
 
         try {
-            command.file.execute(msg, args);
+            command.file.execute(azure, msg, args);
         } catch (e) {
             msg.reply({embed:{
                 author: {
