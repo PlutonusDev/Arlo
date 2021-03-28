@@ -6,7 +6,7 @@ function sendLog(title, msg) {
 }
 
 module.exports = {
-    log: msg => sendLog("OKAY", chalk.green(msg)),
+    log: msg => sendLog("OKAY", chalk.white(msg)),
     warn: msg => sendLog("WARN", chalk.yellow(msg)),
     error: msg => sendLog("ERR!", chalk.red(msg))
 }

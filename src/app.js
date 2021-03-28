@@ -1,3 +1,5 @@
+const chalk = require("chalk");
+
 const Azure = require("./struct");
 const utils = require("./util");
 const config = require("./data/config");
@@ -14,11 +16,12 @@ const init = async () => {
 
     const bot = new Discord(config.discord);
     bot.on("ready", () => Logger.log("Discord bot online!"));
-    bot.on("error", e => new Error({ name: "Discord Error", info: e.message }));
+    bot.on("info", m => Logger.log(`[${chalk.green("DISCORD")}] ${m}`));
+    bot.on("warning", m => Logger.log(`[${chalk.green("DISCORD")}] (${chalk.yellow("WARNING")}) ${m}`));
+    bot.on("error", e => new Error({ name: "Discord Error", info: e }));
 
     db.connect();
     bot.connect();
 }
 
 init();
-//throw new AzureError({name: "lol rip", info: "well fuck, what the hell happened, sam?"});
