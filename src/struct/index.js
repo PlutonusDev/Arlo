@@ -1,5 +1,5 @@
 module.exports = {
-	Client: require("./Client"),
+	WebPanel: require("./WebPanel"),
 	Discord: require("./Discord"),
 	Database: require("./Database")
 }

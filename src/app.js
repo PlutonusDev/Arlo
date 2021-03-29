@@ -5,26 +5,35 @@ const utils = require("./util");
 const config = require("./data/config");
 
 const { Logger, Error } = utils;
-const { Discord, Database, Webpanel } = Azure;
+const { WebPanel, Discord, Database } = Azure;
+
+const instLog = m => Logger.log(`[${chalk.magenta("INSTANCE")}] ${m}`);
 
 const init = async () => {
     Logger.log("Initializing Azure!");
 
     const db = new Database(config.database);
-    db.on("ready", () => Logger.log("Database connected!"));
-    db.on("info", m => Logger.log(`[${chalk.blue("DATABASE")}] ${m}`));
+    db.on("ready", () => instLog("Database connected!"));
+    db.on("info", m => Logger.log(`[${chalk.cyan("DATABASE")}] ${m}`));
     db.on("error", e => new Error({ name: "Database Error", info: e.message }));
 
     const bot = new Discord(config.discord);
-    bot.on("ready", () => Logger.log("Discord bot online!"));
+    bot.on("ready", () => instLog("Discord bot online!"));
     bot.on("info", m => Logger.log(`[${chalk.green("DISCORD")}] ${m}`));
     bot.on("warning", m => Logger.log(`[${chalk.green("DISCORD")}] (${chalk.yellow("WARNING")}) ${m}`));
     bot.on("error", e => new Error({ name: "Discord Error", info: e }));
 
+    const panel = new WebPanel(config.webpanel);
+    panel.on("ready", () => instLog("Panel is online!"));
+    panel.on("info", m => Logger.log(`[${chalk.yellow("WEBPANEL")}] ${m}`));
+    panel.on("error", e => new Error({ name: "WebPanel Error", info: e }));
+
     db.connect();
     bot.connect();
+    panel.start();
 
     bot.allocDB(db.connection);
+    panel.allocDB(db.connection);
 }
 
 init();

@@ -7,6 +7,15 @@ module.exports = {
     // Discord Bot Settings
     discord: {
         token: "",
-        prefix: "a;"
+        prefix: "a;",
+        appId: "",
+        appSecret: ""
+    },
+
+    // Webpanel Settings
+    webpanel: {
+        domain: "mysite.com",
+        port: 3000,
+        sessionSecret: "YoUShOuLDChAnGeThIs!!"
     }
 }

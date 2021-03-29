@@ -3,9 +3,8 @@ const path = require("path");
 
 const EventEmitter = require("events");
 const discord = require("discord.js");
-const { Module } = require("module");
 
-module.exports = class client extends EventEmitter {
+module.exports = class Client extends EventEmitter {
     constructor(config) {
         super();
 
@@ -27,7 +26,7 @@ module.exports = class client extends EventEmitter {
         return new Promise(async res => {
             // First, load commands.
             this.emit("info", "Loading modules...");
-            if (!fs.existsSync(path.join(__dirname, "..", "data", "modules"))) return this.emit("error", { message: "The modules folder does not exist. '/data/modules/'" })
+            if (!fs.existsSync(path.join(__dirname, "..", "data", "modules"))) return this.emit("error", { message: "The modules folder does not exist. '/data/modules/'" });
             await fs.readdir(path.join(__dirname, "..", "data", "modules"), (err, categories) => {
                 if (err) return this.emit("error", "Error reading modules folder. '/data/modules/'");
                 categories.forEach(async category => {
@@ -59,6 +58,7 @@ module.exports = class client extends EventEmitter {
                 });
             });
 
+            // And then our events...
             if (!fs.existsSync(path.join(__dirname, "..", "data", "events"))) return this.emit("error", { message: "The events folder does not exist. '/data/events/'" })
             await fs.readdir(path.join(__dirname, "..", "data", "events"), (err, events) => {
                 events.forEach(event => {
