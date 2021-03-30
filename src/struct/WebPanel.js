@@ -27,12 +27,13 @@ module.exports = class WebPanel extends EventEmitter {
             await fs.readdir(path.join(__dirname, "..", "data", "panel", "routes"), (err, routes) => {
                 if (err) return this.emit("error", "Error reading routes folder. '/data/panel/routes/'");
                 routes.forEach(route => {
-                    const router = require(path.join(__dirname, "..", "data", "panel", "routes", route));
+                    const router = require(path.join(__dirname, "..", "data", "panel", "routes", route))(this.database);
                     this.app.use(router.root, router.controller);
                     this.emit("info", `Bound route '${router.name}' to '${router.root}'`);
                 });
             });
 
+            this.app.use("/assets", express.static(path.join(__dirname, "..", "data", "panel", "assets")));
             this.app.engine("hbs", exphbs({
                 extname: ".hbs",
                 defaultLayout: "main",

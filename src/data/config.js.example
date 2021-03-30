@@ -8,8 +8,9 @@ module.exports = {
     discord: {
         token: "",
         prefix: "a;",
-        appId: "",
-        appSecret: ""
+        clientId: "",
+        clientSecret: "",
+        redirectUri: ""
     },
 
     // Webpanel Settings

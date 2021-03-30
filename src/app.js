@@ -28,12 +28,12 @@ const init = async () => {
     panel.on("info", m => Logger.log(`[${chalk.yellow("WEBPANEL")}] ${m}`));
     panel.on("error", e => new Error({ name: "WebPanel Error", info: e }));
 
-    db.connect();
+    await db.connect();
+    bot.allocDB(db);
+    panel.allocDB(db);
+
     bot.connect();
     panel.start();
-
-    bot.allocDB(db.connection);
-    panel.allocDB(db.connection);
 }
 
 init();
