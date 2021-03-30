@@ -12,6 +12,11 @@ module.exports = db => {
     router.get("/login", (req, res) => {
         res.status(200).redirect(`https://discord.com/api/oauth2/authorize?scope=identify%20guilds&response_type=code&client_id=${config.clientId}&redirectUri=${encodeURIComponent(config.redirectUri)}&prompt=none`);
     });
+
+    router.get("/logout", (req, res) => {
+        req.session.auth = undefined;
+        res.status(200).redirect("/");
+    })
     
     router.get("/callback", (req, res) => {
         post("https://discord.com/api/v8/oauth2/token",
@@ -38,11 +43,15 @@ module.exports = db => {
                         Authorization: `Bearer ${resp.data.access_token}`,
                     },
                 }).then(async guilds => {
-                    if(db.userExists(user.data.id)) {
-                        req.session.auth = db.fetchUser(user.data.id);
+                    if(await db.userExists(user.data.id)) {
+                        req.session.auth = await db.fetchUser(user.data.id);
                         res.status(200).redirect("/dashboard");
                     } else {
-                        req.session.auth = db.createUser(user.data);
+                        user.data.security = {
+                            oAuth_Access: resp.data.access_token,
+                            oAuth_Refresh: resp.data.refresh_token
+                        }
+                        req.session.auth = await db.createUser(user.data);
                         res.status(200).redirect("/welcome");
                     }
                     db.assignGuilds(guilds.data, user.data.id);

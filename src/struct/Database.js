@@ -9,6 +9,7 @@ module.exports = class Database extends EventEmitter {
         this.config = config;
         this.mongoose = mongoose;
         this.connected = false;
+        this.bot = false;
         this.schemas = {
             User: new mongoose.Schema({
                 username: String,
@@ -28,7 +29,8 @@ module.exports = class Database extends EventEmitter {
             Guild: new mongoose.Schema({
                 name: String,
                 id: String,
-                icon: String
+                icon: String,
+                editable: Boolean
             })
         }
         this.models = {
@@ -54,6 +56,11 @@ module.exports = class Database extends EventEmitter {
         this.emit("info", "Database connection established.")
     }
 
+    allocBot(conn) {
+        this.bot = conn;
+        this.emit("info", "Reference to bot received.")
+    }
+
     userExists(id) {
         return new Promise(res => {
             this.refs.users.findOne({ id: id }, (e, user) => {
@@ -65,10 +72,11 @@ module.exports = class Database extends EventEmitter {
 
     createUser(userObj) {
         return new Promise(async res => {
-            userObj.security.token = makeToken();
+            userObj.security.token = this.makeToken();
             const user = new this.models.User(userObj);
             await user.save();
             res(user);
+            this.emit("info", `Created user '${user.username}'`);
         })
     }
 
@@ -95,6 +103,7 @@ module.exports = class Database extends EventEmitter {
             const guild = new this.models.Guild(guildObj);
             await guild.save();
             res(guild);
+            this.emit("info", `Created guild '${guild.name}'`);
         })
     }
 
@@ -107,22 +116,51 @@ module.exports = class Database extends EventEmitter {
         });
     }
 
+    fetchUserGuilds(userId) {
+        return new Promise(async res => {
+            const user = await this.fetchUser(userId);
+            if(!user) return false;
+            const guilds = [];
+            user.guilds.forEach(async guild => {
+                const fetchedGuild = await this.fetchGuild(guild.id);
+                //console.log(fetchedGuild);
+                guilds.push({
+                    id: fetchedGuild.id,
+                    name: fetchedGuild.name,
+                    icon: fetchedGuild.icon,
+                    editable: fetchedGuild.editable
+                });
+            });
+            res(guilds);
+        });
+    }
+
     assignGuilds(guildsObj, userId) {
         return new Promise(async res => {
             const user = await this.fetchUser(userId);
+            user.guilds = [];
             guildsObj.forEach(async guild => {
-                if(this.guildExists(guild.id)) {
-                    const known = this.fetchGuild(guild.id);
-                    if(guild.name !== known.name) known.name = guild.name;
-                    if(guild.icon !== known.icon) known.icon = guild.icon;
-                    await known.save();
-                    user.guilds.push({
+                const known = await this.fetchGuild(guild.id);
+                const dg = await this.bot.guilds.cache.get(guild.id);
+                if(known) {
+                    if(guild.name !== known.name || guild.icon !== known.icon || (dg === undefined && known.editable) || (dg !== undefined && !known.editable)) {
+                        await this.refs.guilds.updateOne({ id: known.id }, { $set: { name: guild.name, icon: guild.icon, editable: dg !== undefined ? true : false } })
+                    }
+                } else {
+                    await this.createGuild({
+                        name: guild.name,
                         id: guild.id,
-                        permissions: guild.permissions
+                        icon: guild.icon,
+                        editable: dg !== undefined ? true : false
                     });
-                    await user.save();
                 }
+                user.guilds.push({
+                    id: guild.id,
+                    permissions: guild.permissions
+                });
+                await this.refs.users.updateOne({ id: user.id }, { $set: { guilds: user.guilds } });
             });
+            this.emit("info", `Updated guilds for user '${userId}'`)
         });
     }
 

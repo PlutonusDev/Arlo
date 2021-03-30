@@ -1,0 +1,25 @@
+<section class="text-gray-400 bg-gray-900 body-font">
+    <div class="container px-5 py-12 mx-auto">
+        <div class="flex flex-col text-center w-full mb-8">
+            <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-white">Azure Commands List</h1>
+            <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Sorted by category, for your viewing pleasure.</p>
+        </div>
+        {{#each commands}}
+            <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 ml-4 text-white">{{caps this.name}} Commands</h1>
+            <div class="flex flex-wrap -m-4">
+                {{#each this.cmds}}
+                    <div class="p-4 w-1/2">
+                        <div class="h-full border-2 {{#if this.disabled}}border-gray-400 bg-gray-800{{else}}border-gray-800{{/if}} rounded-lg overflow-hidden">
+                            <div class="p-6">
+                                <h2 class="tracking-widest text-xs title-font font-medium text-gray-500 mb-1">{{caps this.category}}</h2>
+                                <h1 class="title-font text-lg font-medium text-red-400 mb-3">{{caps this.name}} <a class="items-center text-red-300 bg-gray-800 border-0 py-1 px-3 focus:outline-none rounded text-base ml-2">{{this.name}}</a> {{#if this.aliases}}{{#each this.aliases}}<a class="items-center text-red-300 bg-gray-800 border-0 py-1 px-3 focus:outline-none rounded text-base ml-2">{{this}}</a> {{/each}}{{/if}} {{#if this.disabled}}<a class="items-center text-white bg-red-400 border-0 py-1 px-3 focus:outline-none rounded text-base ml-4">( DISABLED )</a>{{/if}}</h1>
+                                <p class="leading-relaxed mb-3 h-full">{{this.description}}</p>
+                                <p class="leading-relaxed mb-3 h-full">Usage: {{#if this.usage}}<a class="items-center text-red-300 bg-gray-800 border-0 py-1 px-3 focus:outline-none rounded text-base ml-2">{{this.usage}}</a>{{else}}<span class="text-red-400">Not Specified</span>{{/if}}</p>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        {{/each}}
+    </div>
+</section>

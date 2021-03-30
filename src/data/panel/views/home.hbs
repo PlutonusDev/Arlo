@@ -6,8 +6,13 @@
             <p class="leading-relaxed text-base">Azure is a <em>brand-spankin' new</em> open-source Discord bot, packed
                 full of fun and social commands, and even a detailed moderation system, built right in.</p>
             <div class="flex md:mt-4 mt-6">
-                <a href="/auth/login"
-                    class="inline-flex text-white bg-red-500 border-0 py-1 px-4 focus:outline-none hover:bg-red-600 rounded">Login</a>
+                {{#if auth}}
+                    <a href="/dashboard"
+                        class="inline-flex text-white bg-red-500 border-0 py-1 px-4 focus:outline-none hover:bg-red-600 rounded">Dashboard</a>
+                {{else}}
+                    <a href="/auth/login"
+                        class="inline-flex text-white bg-red-500 border-0 py-1 px-4 focus:outline-none hover:bg-red-600 rounded">Login</a>
+                {{/if}}
                 <a href="https://github.com/PlutonusDev/Azure" class="text-red-400 inline-flex items-center ml-4">View
                     Source Code on Github
                     <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"

@@ -1,7 +1,7 @@
 module.exports = {
     name: "help",
     aliases: [ "cmds", "commands" ],
-    usage: [ "help", "help <Command>" ],
+    usage: "help [command]",
     description: "View commands or help for a specific command.",
     disabled: false,
 
@@ -17,6 +17,7 @@ module.exports = {
 			for (x of categories) {
 				out += `**${x.charAt(0).toUpperCase() + x.substr(1)} Commands**\n\`\`\`asciidoc\n${commands.filter(command => command.category === x).map(command => `${command.file.name}${" ".repeat(longest - command.file.name.length)} :: ${command.file.description}`).join('\n')}\`\`\`\n\n`
 			}
+            out += `For a more detailed list of commands, [click / tap here](https://azure.plutonus.co/commands).`;
 			return msg.channel.send(msg.author, {embed:{
 				author: {
                     name: "Commands List",
@@ -26,7 +27,7 @@ module.exports = {
             }});
 		} else {
             let command = args[0];
-			if (azure.commands.has(command)) {
+			if (azure.commands.has(command) || azure.commands.find((c) => c.file.aliases.includes(command))) {
 				command = azure.commands.get(command);
 				const longest = 8;
 				return msg.channel.send(msg.author, {embed:{
@@ -42,7 +43,7 @@ module.exports = {
                         name: "Invalid Command",
                         icon_url: ""
                     },
-					description: `${command} is not a valid command.`
+					description: `\`${command}\` is not a valid command.`
                 }});
 			}
         }

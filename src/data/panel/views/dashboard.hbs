@@ -1,0 +1,42 @@
+<section class="text-gray-400 bg-gray-900 body-font">
+    <div class="container px-5 py-12 mx-auto">
+        <div class="flex flex-wrap -m-4">
+            {{#if guilds}}
+                {{#each guilds}}
+                    <div class="p-4 md:w-1/2 lg:w-1/4">
+                        <div class="h-full border-2 {{#if this.editable}}border-gray-800{{else}}border-red-800{{/if}} rounded-lg overflow-hidden">
+                            <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="{{#if this.icon}}https://cdn.discordapp.com/icons/{{this.id}}/{{this.icon}}.{{startsWith this.icon "a_" "gif" "webp"}}?size=4096{{else}}https://azure.plutonus.co/assets/img/azurelogo.png{{/if}}"
+                                alt="guild icon">
+                            <div class="p-6">
+                                <h2 class="tracking-widest text-xs title-font font-medium text-gray-700 mb-1">{{this.id}}</h2>
+                                <h1 class="title-font text-lg font-medium {{#if this.editable}}text-white{{else}}text-red-300{{/if}} mb-3">
+                                    {{#if this.editable}}
+                                        <div class="w-4 h-4 mr-1 inline-flex items-center justify-center rounded-full bg-green-500 text-white flex-shrink-0">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        </div>
+                                    {{else}}
+                                        <div class="w-4 h-4 mr-1 inline-flex items-center justify-center rounded-full bg-red-500 text-white flex-shrink-0">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                        </div>
+                                    {{/if}}
+                                    {{this.name}}
+                                </h1>
+                                <div class="flex items-center flex-wrap ">
+                                    {{#if this.editable}}
+                                        <a href="/dashboard/{{this.id}}" class="mx-auto inline-flex items-center bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded">Edit
+                                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                        </a>
+                                    {{else}}
+                                        <a href="https://discord.com/api/oauth2/authorize?client_id=791294502185861130&scope=bot&guild_id={{this.id}}&disable_guild_select=true&permissions=271698950" target="_blank" class="mx-auto inline-flex items-center bg-green-500 text-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-green-700 rounded">Add Azure
+                                            <svg class="w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        </a>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+            {{/if}}
+        </div>
+    </div>
+</section>

@@ -34,6 +34,8 @@ const init = async () => {
 
     bot.connect();
     panel.start();
+
+    db.allocBot(bot.client);
 }
 
 init();

@@ -1,8 +1,9 @@
 module.exports = {
     name: "ping",
     aliases: [ "hello" ],
+    usage: "ping",
     description: "The first command anyone ever writes.",
-    disabled: false,
+    disabled: true,
 
     guildOnly: false,
     botPerms: [ "SEND_MESSAGES" ],

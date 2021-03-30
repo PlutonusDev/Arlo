@@ -37,15 +37,25 @@ module.exports = class WebPanel extends EventEmitter {
             this.app.engine("hbs", exphbs({
                 extname: ".hbs",
                 defaultLayout: "main",
-            
-                helpers: {}
+
+                helpers: {
+                    startsWith: (str, prefix, truthy, falsy) => str.startsWith(prefix) ? truthy: falsy,
+                    stringify: obj => JSON.stringify(obj),
+                    count: obj => obj.length,
+                    caps: str => {
+                        str = str.split("");
+                        const uc = str[0].toUpperCase();
+                        str.shift();
+                        return uc+str.join("");
+                    }
+                }
             }));
 
             this.app.set("view engine", "hbs");
             this.app.set("views", path.join(__dirname, "..", "data", "panel", "views"));
 
             this.app.use(bodyParser.json());
-            this.app.use(bodyParser.urlencoded({extended:true}));
+            this.app.use(bodyParser.urlencoded({ extended: true }));
 
             this.app.use(session({
                 secret: this.config.sessionSecret,
