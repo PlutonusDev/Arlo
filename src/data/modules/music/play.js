@@ -72,6 +72,12 @@ module.exports = {
 
             const resource = createAudioResource(await ytdl(song.url));
             await queue.player.play(resource);
+            queue.player.once("stateChange", async (oldState, newState) => {
+                if(newState.status === AudioPlayerStatus.Idle) {
+                    queue.songs.shift();
+                    await play(q.songs[0]);
+                }
+            });
             queue.textChannel.send({
                 embed: {
                     author: {
@@ -93,12 +99,6 @@ module.exports = {
             q.connection = connection;
             q.player = createAudioPlayer();
             q.player.subscribe(q.connection);
-            q.player.once("stateChange", async (oldState, newState) => {
-                if(newState.status === AudioPlayerStatus.Idle) {
-                    q.songs.shift();
-                    await play(q.songs[0]);
-                }
-            });
 			play(q.songs[0]);
 		} catch (error) {
 			azure.musicQueue.delete(msg.guild.id);
