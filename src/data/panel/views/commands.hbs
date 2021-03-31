@@ -1,20 +1,30 @@
 <section class="text-gray-400 bg-gray-900 body-font">
     <div class="container px-5 py-12 mx-auto">
-        <div class="flex flex-col text-center w-full mb-8">
-            <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-white">Azure Commands List</h1>
+        <div class="flex flex-col text-center w-full">
+            <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-300">Azure Commands List</h1>
             <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Sorted by category, for your viewing pleasure.</p>
         </div>
         {{#each commands}}
-            <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 ml-4 text-white">{{caps this.name}} Commands</h1>
+            <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 mt-8 ml-4 text-gray-300">{{caps this.name}} Commands</h1>
             <div class="flex flex-wrap -m-4">
                 {{#each this.cmds}}
-                    <div class="p-4 w-1/2">
-                        <div class="h-full border-2 {{#if this.disabled}}border-gray-400 bg-gray-800{{else}}border-gray-800{{/if}} rounded-lg overflow-hidden">
-                            <div class="p-6">
-                                <h2 class="tracking-widest text-xs title-font font-medium text-gray-500 mb-1">{{caps this.category}}</h2>
-                                <h1 class="title-font text-lg font-medium text-red-400 mb-3">{{caps this.name}} <a class="items-center text-red-300 bg-gray-800 border-0 py-1 px-3 focus:outline-none rounded text-base ml-2">{{this.name}}</a> {{#if this.aliases}}{{#each this.aliases}}<a class="items-center text-red-300 bg-gray-800 border-0 py-1 px-3 focus:outline-none rounded text-base ml-2">{{this}}</a> {{/each}}{{/if}} {{#if this.disabled}}<a class="items-center text-white bg-red-400 border-0 py-1 px-3 focus:outline-none rounded text-base ml-4">( DISABLED )</a>{{/if}}</h1>
-                                <p class="leading-relaxed mb-3 h-full">{{this.description}}</p>
-                                <p class="leading-relaxed mb-3 h-full">Usage: {{#if this.usage}}<a class="items-center text-red-300 bg-gray-800 border-0 py-1 px-3 focus:outline-none rounded text-base ml-2">{{this.usage}}</a>{{else}}<span class="text-red-400">Not Specified</span>{{/if}}</p>
+                    <div class="p-4 sm:w-1/2 w-full">
+                        <div class="h-full border-2 {{#if this.disabled}}border-gray-400 bg-gray-700 opacity-80{{else}}border-gray-800{{/if}} rounded-lg overflow-hidden">
+                            <div class="p-6 flex flex-wrap">
+                                <div class="w-3/4">
+                                    <h1 class="title-font text-lg font-medium text-gray-300 mb-3">{{caps this.name}} {{#if this.disabled}}<a class="items-center text-gray-300 bg-red-400 border-0 py-1 px-3 focus:outline-none rounded text-base ml-4">( DISABLED )</a>{{/if}}</h1>
+                                    <p class="leading-relaxed mb-3">{{this.description}}</p>
+                                    <p class="leading-relaxed mb-3">Usage: {{#if this.usage}}<a class="items-center text-gray-200 bg-gray-800 border-0 py-1 px-3 focus:outline-none rounded text-base ml-2">{{this.usage}}</a>{{else}}<span class="text-red-400">Not Specified</span>{{/if}}</p>
+                                </div>
+                                <div class="w-1/4 text-center">
+                                    <p class="leading-relaxed mb-3">Aliases</p>
+                                    <p class="items-center text-gray-200 bg-gray-800 border-0 py-1 px-3 focus:outline-none rounded text-base">{{this.name}}</p>
+                                    {{#if this.aliases}}
+                                        {{#each this.aliases}}
+                                            <p class="items-center text-gray-200 bg-gray-800 border-0 py-1 px-3 focus:outline-none rounded text-base mt-1">{{this}}</p>
+                                        {{/each}}
+                                    {{/if}}
+                                </div>
                             </div>
                         </div>
                     </div>

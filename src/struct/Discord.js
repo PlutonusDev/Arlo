@@ -2,24 +2,45 @@ const fs = require("fs");
 const path = require("path");
 
 const EventEmitter = require("events");
-const discord = require("discord.js");
+const { Client, Intents, Collection, APIMessage } = require("discord.js");
 
-module.exports = class Client extends EventEmitter {
+module.exports = class Discord extends EventEmitter {
     constructor(config) {
         super();
 
-        this.discord = discord;
         this.config = config;
-        this.client = new this.discord.Client();
+        this.client = new Client({
+            ws: { intents: [ Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES ] }
+        });
 
         this.categories = [];
-        this.commands = new this.discord.Collection();
-        this.cooldowns = new this.discord.Collection();
+        this.commands = new Collection();
+        this.cooldowns = new Collection();
+        this.musicQueue = new Map();
         this.database = false;
 
         this.client.once("ready", () => this.emit("ready"));
 
         return this;
+    }
+
+    replyTo(message, content) {
+        let api = new APIMessage(message.channel, {});
+            api.data = {
+                content: "",
+                message_reference: {
+                    message_id: message.id,
+                    channel_id: message.channel.id,
+                    guild_id: message.guild ? message.guild.id : null,
+                }
+            }
+        if (typeof content === "string") {
+            api.data.content = content;
+        } else {
+            api.data.embed = content.embed;
+        }
+
+        message.channel.send(api);
     }
 
     async load() {
@@ -35,8 +56,8 @@ module.exports = class Client extends EventEmitter {
                         modules.forEach(module => {
                             try {
                                 require(path.join(__dirname, "..", "data", "modules", category, module));
-                            } catch {
-                                this.emit("error", `Error in command '${category}/${module}'`);
+                            } catch(e) {
+                                this.emit("error", `Error in command '${category}/${module}'\n\t${e}`);
                             }
                             const command = require(path.join(__dirname, "..", "data", "modules", category, module));
                             if (this.categories.indexOf(category) === -1) this.categories.push(category);
@@ -65,7 +86,7 @@ module.exports = class Client extends EventEmitter {
                     event = event.replace(/\.js$/i, "");
                     this.client.on(event, (data) => require(path.join(__dirname, "..", "data", "events", event))(this, data));
                     this.emit("info", `Bound event '${event}'`);
-                })
+                });
             });
             return res();
         });

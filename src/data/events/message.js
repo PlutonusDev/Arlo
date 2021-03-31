@@ -1,4 +1,5 @@
 module.exports = (azure, msg) => {
+    if(msg.partial) msg.fetch();
     if (!msg.content.startsWith(azure.config.prefix) || msg.author.bot) return;
 
     const cmd = msg.content.slice(azure.config.prefix.length).split(/ +/).shift().toLowerCase();

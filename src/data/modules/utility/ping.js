@@ -10,6 +10,6 @@ module.exports = {
     userPerms: [  ],
 
     execute: (azure, msg, args) => {
-        msg.channel.send(`Hello, ${msg.author.username}!`);
+        azure.replyTo(msg, `Hello, ${msg.author.username}!`);
     }
 }
