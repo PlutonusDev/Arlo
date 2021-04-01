@@ -26,16 +26,16 @@ module.exports = {
 				description: out
             }});
 		} else {
-            let command = args[0];
-			if (azure.commands.has(command) || azure.commands.find((c) => c.file.aliases.includes(command))) {
-				command = azure.commands.get(command);
+            let cmd = args[0];
+			if (azure.commands.has(cmd) || azure.commands.find((c) => c.file.aliases && c.file.aliases.includes(cmd))) {
+				command = azure.commands.get(cmd) || azure.commands.find(c => c.file.aliases && c.file.aliases.includes(cmd));
 				const longest = 8;
 				return azure.replyTo(msg, {embed:{
 					author: {
                         name: "Command Help",
                         icon_url: ""
                     },
-					description: `\`\`\`asciidoc\nCommand${" ".repeat(longest-7)} :: ${command.file.name}\nCategory${" ".repeat(longest-8)} :: ${command.category}\nCooldown${" ".repeat(longest-8)} :: ${command.file.cooldown ? `${command.file.cooldown} Seconds` : "3 Seconds"}\n\n[ Usage ]\n${command.file.usage ? azure.config.prefix+command.file.usage : "Not Specified"}\n\n[ Description ]\n${command.file.description}\`\`\``
+					description: `\`\`\`asciidoc\nCommand${" ".repeat(longest-7)} :: ${command.file.name}\nCategory${" ".repeat(longest-8)} :: ${command.category}\nCooldown${" ".repeat(longest-8)} :: ${command.file.cooldown ? `${command.file.cooldown} Seconds` : "3 Seconds"}\n\n[ Usage ]\n${command.file.usage ? azure.config.prefix+command.file.usage : "Not Specified"}\n\n[ Description ]\n${command.file.description ? command.file.description : "Not Specified"}\`\`\``
                 }});
 			} else {
 				return azure.replyTo(msg, {embed:{

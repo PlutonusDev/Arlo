@@ -26,17 +26,23 @@ module.exports = {
             }
         });
 
+        const response = await azure.replyTo(msg, {embed:{
+            author: {
+                name: "Please Wait",
+                icon_url: ""
+            },
+            description: `I'm locating some information, ${msg.member.displayName}.`
+        }})
         const queue = azure.musicQueue.get(msg.guild.id);
         const songInfo = await ytdl.getInfo(args[0].replace(/<(.+)>/g, '$1'));
         const song = {
-            id: songInfo.videoDetails.video_id,
             title: songInfo.videoDetails.title.replace("\\", "\\\\").replace("*", "\\*").replace("_", "\\_").replace("~", "\\~"),
             url: songInfo.videoDetails.video_url
         };
 
         if (queue) {
             queue.songs.push(song);
-            return azure.replyTo(msg, {
+            return response.edit({
                 embed: {
                     author: {
                         name: "Song Added to Queue",
@@ -56,10 +62,11 @@ module.exports = {
             playing: true
         });
 
-        const play = async song => {
+        const play = async () => {
             const queue = azure.musicQueue.get(msg.guild.id);
-            if (!song) {
-                queue.voiceChannel.leave();
+            const song = queue.songs[0];
+            if (!song || !queue || (queue && !queue.songs[0])) {
+                queue.connection.destroy();
                 azure.musicQueue.delete(msg.guild.id);
                 return msg.channel.send({embed:{
                     author: {
@@ -72,13 +79,11 @@ module.exports = {
 
             const resource = createAudioResource(await ytdl(song.url));
             await queue.player.play(resource);
-            queue.player.once("stateChange", async (oldState, newState) => {
-                if(newState.status === AudioPlayerStatus.Idle) {
-                    queue.songs.shift();
-                    await play(q.songs[0]);
-                }
+            queue.listener = queue.player.once(AudioPlayerStatus.Idle, async () => {
+                queue.songs.shift();
+                play();
             });
-            queue.textChannel.send({
+            return queue.textChannel.send({
                 embed: {
                     author: {
                         name: "Now Playing",
@@ -99,11 +104,19 @@ module.exports = {
             q.connection = connection;
             q.player = createAudioPlayer();
             q.player.subscribe(q.connection);
-			play(q.songs[0]);
+			play();
+            response.edit({embed:{
+                author: {
+                    name: "Song Queue",
+                    icon_url: ""
+                },
+                description: "Starting the music!"
+            }})
 		} catch (error) {
-			azure.musicQueue.delete(msg.guild.id);
-			await channel.leave();
-			return msg.channel.send({embed:{
+            let q = azure.musicQueue.get(msg.guild.id);
+			await q.connection.destroy();
+            azure.musicQueue.delete(msg.guild.id);
+			return response.edit({embed:{
                 author: {
                     name: "Unexpected Error",
                     icon_url: ""

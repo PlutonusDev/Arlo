@@ -24,7 +24,7 @@ module.exports = class Discord extends EventEmitter {
         return this;
     }
 
-    replyTo(message, content) {
+    async replyTo(message, content) {
         let api = new APIMessage(message.channel, {});
             api.data = {
                 content: "",
@@ -40,7 +40,7 @@ module.exports = class Discord extends EventEmitter {
             api.data.embed = content.embed;
         }
 
-        message.channel.send(api);
+        return await message.channel.send(api);
     }
 
     async load() {
@@ -84,7 +84,7 @@ module.exports = class Discord extends EventEmitter {
             await fs.readdir(path.join(__dirname, "..", "data", "events"), (err, events) => {
                 events.forEach(event => {
                     event = event.replace(/\.js$/i, "");
-                    this.client.on(event, (data) => require(path.join(__dirname, "..", "data", "events", event))(this, data));
+                    this.client.on(event, (data, ...args) => require(path.join(__dirname, "..", "data", "events", event))(this, data, args));
                     this.emit("info", `Bound event '${event}'`);
                 });
             });
