@@ -10,7 +10,10 @@ module.exports = {
         prefix: "a;",
         clientId: "",
         clientSecret: "",
-        redirectUri: ""
+        redirectUri: "",
+        api: {
+            youtube: ""
+        }
     },
 
     // Webpanel Settings

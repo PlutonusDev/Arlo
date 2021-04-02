@@ -1,8 +1,8 @@
 module.exports = (azure, msg) => {
     if(msg.partial) msg.fetch();
-    if (!msg.content.startsWith(azure.config.prefix) || msg.author.bot) return;
+    if ((!msg.content.startsWith(azure.config.prefix) && !msg.mentions.users.first === azure.client.user) || msg.author.bot) return;
 
-    const cmd = msg.content.slice(azure.config.prefix.length).split(/ +/).shift().toLowerCase();
+    const cmd = msg.content.startsWith(azure.config.prefix) ? msg.content.slice(azure.config.prefix.length).split(/ +/).shift().toLowerCase() : msg.content.split(/ +/)[1] && msg.content.split(/ +/)[1].toLowerCase();
 
     if (azure.commands.has(cmd) || azure.commands.find((c) => c.file.aliases.includes(cmd))) {
         const args = msg.content.slice(azure.config.prefix.length).split(/ +/);

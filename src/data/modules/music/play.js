@@ -2,6 +2,7 @@ const path = require("path");
 const { createDiscordJSAdapter } = require(path.join(__dirname, "..", "..", "util", "adapter"));
 const { joinVoiceChannel, createAudioResource, createAudioPlayer, AudioPlayerStatus } = require("@discordjs/voice");
 const ytdl = require("ytdl-core-discord");
+const YouTubeAPI = require("simple-youtube-api");
 
 module.exports = {
     name: "play",
@@ -32,13 +33,31 @@ module.exports = {
                 icon_url: ""
             },
             description: `I'm locating some information, ${msg.member.displayName}.`
-        }})
+        }});
+
+        const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
+        const playlistPattern = /^.*(list=)([^#\&\?]*).*/gi;
+
+        const url = args[0];
+        const urlValid = videoPattern.test(url);
+
         const queue = azure.musicQueue.get(msg.guild.id);
-        const songInfo = await ytdl.getInfo(args[0].replace(/<(.+)>/g, '$1'));
-        const song = {
-            title: songInfo.videoDetails.title.replace("\\", "\\\\").replace("*", "\\*").replace("_", "\\_").replace("~", "\\~"),
-            url: songInfo.videoDetails.video_url
-        };
+        let song;
+        if(urlValid) {
+            const songInfo = await ytdl.getInfo(args[0].replace(/<(.+)>/g, '$1'));
+            song = {
+                title: songInfo.videoDetails.title.replace("\\", "\\\\").replace("*", "\\*").replace("_", "\\_").replace("~", "\\~"),
+                url: songInfo.videoDetails.video_url
+            };
+        } else {
+            const youtube = new YouTubeAPI(azure.config.api.youtube);
+            const results = await youtube.searchVideos(args.join(" "), 1, { part: "snippet" });
+            const songInfo = await ytdl.getInfo(results[0].url);
+            song = {
+                title: songInfo.videoDetails.title.replace("\\", "\\\\").replace("*", "\\*").replace("_", "\\_").replace("~", "\\~"),
+                url: songInfo.videoDetails.video_url
+            };
+        }
 
         if (queue) {
             queue.songs.push(song);

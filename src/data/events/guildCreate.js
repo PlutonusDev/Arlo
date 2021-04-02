@@ -1,0 +1,1 @@
+module.exports = (azure, guild) => guild.members.fetch();
