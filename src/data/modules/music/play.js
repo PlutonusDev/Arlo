@@ -124,13 +124,7 @@ module.exports = {
             q.player = createAudioPlayer();
             q.player.subscribe(q.connection);
 			play();
-            response.edit({embed:{
-                author: {
-                    name: "Song Queue",
-                    icon_url: ""
-                },
-                description: "Starting the music!"
-            }})
+            response.delete();
 		} catch (error) {
             let q = azure.musicQueue.get(msg.guild.id);
 			await q.connection.destroy();
