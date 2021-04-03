@@ -83,9 +83,9 @@ module.exports = {
 
         const play = async () => {
             const queue = azure.musicQueue.get(msg.guild.id);
-            const song = queue.songs[0];
-            if (!song || !queue || (queue && !queue.songs[0])) {
-                queue.connection.destroy();
+            if(!queue) return; // ??????
+            if (!queue.songs[0]) {
+                if(queue.connection) queue.connection.destroy();
                 azure.musicQueue.delete(msg.guild.id);
                 return msg.channel.send({embed:{
                     author: {
@@ -96,11 +96,16 @@ module.exports = {
                 }});
             }
 
-            const resource = createAudioResource(await ytdl(song.url));
+            const resource = createAudioResource(await ytdl(queue.songs[0].url));
             await queue.player.play(resource);
-            queue.listener = queue.player.once(AudioPlayerStatus.Idle, async () => {
-                queue.songs.shift();
-                play();
+            queue.player.on(AudioPlayerStatus.Playing, () => {
+                queue.listener = queue.player.once("stateChange", (oldState, newState) => {
+                    if(oldState.status === AudioPlayerStatus.Playing && newState.status === AudioPlayerStatus.Idle) {
+                        queue.songs.shift();
+                        queue.listener = null;
+                        play();
+                    }
+                });
             });
             return queue.textChannel.send({
                 embed: {
@@ -108,19 +113,18 @@ module.exports = {
                         name: "Now Playing",
                         icon_url: ""
                     },
-                    description: `\`${song.title}\` is now playing.`
+                    description: `\`${queue.songs[0].title}\` is now playing.`
                 }
             });
         }
 
         try {
-			const connection = await joinVoiceChannel({
+			let q = azure.musicQueue.get(msg.guild.id);
+            q.connection = await joinVoiceChannel({
                 channelId: channel.id,
                 guildId: channel.guild.id,
                 adapterCreator: createDiscordJSAdapter(channel)
             });
-			let q = azure.musicQueue.get(msg.guild.id);
-            q.connection = connection;
             q.player = createAudioPlayer();
             q.player.subscribe(q.connection);
 			play();

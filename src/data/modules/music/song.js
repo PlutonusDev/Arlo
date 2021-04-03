@@ -1,7 +1,7 @@
 module.exports = {
-    name: "np",
-    aliases: [ "playing", "song" ],
-    usage: "np",
+    name: "song",
+    aliases: [ "np", "playing" ],
+    usage: "song",
     description: "View the current and next song.",
     disabled: false,
 

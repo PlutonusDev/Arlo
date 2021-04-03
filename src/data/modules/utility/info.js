@@ -41,7 +41,13 @@ module.exports = {
                 name: "Guilds",
                 value: `${azure.client.guilds.cache.size} servers`,
                 inline: true
-            }]
+            }, {
+                name: "Built With",
+                value: Object.keys(require(path.join(__dirname, "..", "..", "..", "..", "package.json")).dependencies).map(package => `\`${package}\``).join(", ")
+            }, {
+                name: "Source Code",
+                value: `Available [here](https://github.com/PlutonusDev/Azure).`,
+            },]
         }});
     }
 }

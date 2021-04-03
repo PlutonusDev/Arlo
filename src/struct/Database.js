@@ -30,7 +30,11 @@ module.exports = class Database extends EventEmitter {
                 name: String,
                 id: String,
                 icon: String,
-                editable: Boolean
+                editable: Boolean,
+
+                settings: {
+                    prefix: String
+                }
             })
         }
         this.models = {
@@ -116,13 +120,29 @@ module.exports = class Database extends EventEmitter {
         });
     }
 
+    updateGuildSettings(guildId, settings) {
+        return new Promise(async res => {
+            if(!this.guildExists(guildId)) return res(false);
+            for(setting of settings) {
+                await this.refs.guilds.updateOne({ id: guildId }, {
+                    $set: {
+                        settings: {
+                            [settings[setting].name]: settings[setting].value
+                        }
+                    }
+                });
+            }
+            res(true);
+        });
+    }
+
     fetchUserGuilds(userId) {
         return new Promise(async res => {
             const user = await this.fetchUser(userId);
             if(!user) return false;
             const guilds = [];
-            user.guilds.forEach(async guild => {
-                const fetchedGuild = await this.fetchGuild(guild.id);
+            for(guild of Object.keys(user.guilds)) {
+                const fetchedGuild = await this.fetchGuild(user.guilds[guild].id);
                 //console.log(fetchedGuild);
                 guilds.push({
                     id: fetchedGuild.id,
@@ -130,7 +150,7 @@ module.exports = class Database extends EventEmitter {
                     icon: fetchedGuild.icon,
                     editable: fetchedGuild.editable
                 });
-            });
+            }
             res(guilds);
         });
     }

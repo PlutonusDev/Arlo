@@ -43,7 +43,13 @@ module.exports = db => {
         if(!req.session.auth) return res.status(401).redirect("/auth/login");
         // This is not a good way of fetching the user's guilds. We should load them after the page is rendered.
         const guilds = await db.fetchUserGuilds(req.session.auth.id);
-        res.status(200).render("dashboard", { auth: req.session.auth, guilds })
+        //guilds.sort((a,b) => (a.editable && !b.editable) ? -1 : ((b.editable && !a.editable) ? 1 : 0));
+        const filteredGuilds = {
+            available: guilds.filter(guild => guild.editable),
+            unavailable: guilds.filter(guild => !guild.editable)
+        }
+
+        res.status(200).render("dashboard", { auth: req.session.auth, guilds: filteredGuilds })
     });
 
     router.get("/dashboard/:id", async (req, res) => {
