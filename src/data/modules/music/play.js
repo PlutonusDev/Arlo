@@ -1,8 +1,8 @@
 const path = require("path");
-const { createDiscordJSAdapter } = require(path.join(__dirname, "..", "..", "util", "adapter"));
-const { joinVoiceChannel, createAudioResource, createAudioPlayer, AudioPlayerStatus } = require("@discordjs/voice");
+const { VoiceControl } = require(path.join(__dirname, "..", "..", "..", "util"));
 const ytdl = require("ytdl-core-discord");
 const YouTubeAPI = require("simple-youtube-api");
+
 
 module.exports = {
     name: "play",
@@ -27,12 +27,12 @@ module.exports = {
             }
         });
 
-        const response = await azure.replyTo(msg, {embed:{
+        const resp = await azure.replyTo(msg, {embed:{
             author: {
-                name: "Please Wait",
+                name: "Working...",
                 icon_url: ""
             },
-            description: `I'm locating some information, ${msg.member.displayName}.`
+            description: "Retrieving information..."
         }});
 
         const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
@@ -59,87 +59,12 @@ module.exports = {
             };
         }
 
-        if (queue) {
-            queue.songs.push(song);
-            return response.edit({
-                embed: {
-                    author: {
-                        name: "Song Added to Queue",
-                        icon_url: ""
-                    },
-                    description: `I've added \`${song.title}\` to the queue.`
-                }
-            });
-        }
-
-        azure.musicQueue.set(msg.guild.id, {
+        if (queue) return queue.addSong(song);
+        await azure.musicQueue.set(msg.guild.id, new VoiceControl({
             textChannel: msg.channel,
             voiceChannel: channel,
-            connection: null,
-            songs: [song],
-            volume: 2,
-            playing: true
-        });
-
-        const play = async () => {
-            const queue = azure.musicQueue.get(msg.guild.id);
-            if(!queue) return; // ??????
-            if (!queue.songs[0]) {
-                if(queue.connection) queue.connection.destroy();
-                azure.musicQueue.delete(msg.guild.id);
-                return msg.channel.send({embed:{
-                    author: {
-                        name: "Queue Empty",
-                        icon_url: ""
-                    },
-                    description: `There's no more songs left in the queue.\nAdd more with \`${azure.config.prefix}play\``
-                }});
-            }
-
-            const resource = createAudioResource(await ytdl(queue.songs[0].url));
-            await queue.player.play(resource);
-            queue.player.on(AudioPlayerStatus.Playing, () => {
-                queue.listener = queue.player.once("stateChange", (oldState, newState) => {
-                    if(oldState.status === AudioPlayerStatus.Playing && newState.status === AudioPlayerStatus.Idle) {
-                        queue.songs.shift();
-                        queue.listener = null;
-                        play();
-                    }
-                });
-            });
-            return queue.textChannel.send({
-                embed: {
-                    author: {
-                        name: "Now Playing",
-                        icon_url: ""
-                    },
-                    description: `\`${queue.songs[0].title}\` is now playing.`
-                }
-            });
-        }
-
-        try {
-			let q = azure.musicQueue.get(msg.guild.id);
-            q.connection = await joinVoiceChannel({
-                channelId: channel.id,
-                guildId: channel.guild.id,
-                adapterCreator: createDiscordJSAdapter(channel)
-            });
-            q.player = createAudioPlayer();
-            q.player.subscribe(q.connection);
-			play();
-            response.delete();
-		} catch (error) {
-            let q = azure.musicQueue.get(msg.guild.id);
-			await q.connection.destroy();
-            azure.musicQueue.delete(msg.guild.id);
-			return response.edit({embed:{
-                author: {
-                    name: "Unexpected Error",
-                    icon_url: ""
-                },
-                description: `Something went wrong while trying to play that song!\n\n\`\`\`${error}\n\`\`\``
-            }});
-		}
+            azure: azure
+        }).addSong(song));
+        resp.delete();
     }
 }

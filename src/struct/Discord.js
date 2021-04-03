@@ -57,7 +57,7 @@ module.exports = class Discord extends EventEmitter {
                             try {
                                 require(path.join(__dirname, "..", "data", "modules", category, module));
                             } catch(e) {
-                                this.emit("error", `Error in command '${category}/${module}'\n\t${e}`);
+                                this.emit("error", `Error in command '${category}/${module}'\n\t${e.stack}`);
                             }
                             const command = require(path.join(__dirname, "..", "data", "modules", category, module));
                             if (this.categories.indexOf(category) === -1) this.categories.push(category);
