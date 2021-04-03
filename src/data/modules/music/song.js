@@ -24,7 +24,7 @@ module.exports = {
                 name: "Music Queue",
                 icon_url: ""
             },
-            description: `Now Playing: \`${queue.songs[0].title}\`${queue.songs.length>1 ? `\n\nNext Up: \`${queue.songs[1].title}\`` : ""}`
+            description: `Now Playing: \`${queue.queue[0].title}\`${queue.queue.length>1 ? `\n\nNext Up: \`${queue.queue[1].title}\`` : ""}`
         }})
     }
 }

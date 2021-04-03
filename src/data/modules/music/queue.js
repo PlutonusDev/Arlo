@@ -22,7 +22,7 @@ module.exports = {
         });
 
         // TODO: Expand functionality
-        azure.replyTo(msg, generateQueueEmbed(msg, queue.songs)[0]);
+        azure.replyTo(msg, generateQueueEmbed(msg, queue.queue)[0]);
     }
 }
 

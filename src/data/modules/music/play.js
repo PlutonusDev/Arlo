@@ -27,14 +27,6 @@ module.exports = {
             }
         });
 
-        const resp = await azure.replyTo(msg, {embed:{
-            author: {
-                name: "Working...",
-                icon_url: ""
-            },
-            description: "Retrieving information..."
-        }});
-
         const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
         const playlistPattern = /^.*(list=)([^#\&\?]*).*/gi;
 
@@ -51,7 +43,15 @@ module.exports = {
             };
         } else {
             const youtube = new YouTubeAPI(azure.config.api.youtube);
-            const results = await youtube.searchVideos(args.join(" "), 1, { part: "snippet" });
+            const results = await youtube.searchVideos(args.join(" "), 1, { part: "snippet" }).catch(e=> {
+                return azure.replyTo(msg, {embed:{
+                    author: {
+                        name: "Unavailable",
+                        icon_url: ""
+                    },
+                    description: `I can't search YouTube at the moment:\n\`\`\`json\n${JSON.stringify(e)}\n\`\`\``
+                }});
+            });
             const songInfo = await ytdl.getInfo(results[0].url);
             song = {
                 title: songInfo.videoDetails.title.replace("\\", "\\\\").replace("*", "\\*").replace("_", "\\_").replace("~", "\\~"),
@@ -65,6 +65,5 @@ module.exports = {
             voiceChannel: channel,
             azure: azure
         }).addSong(song));
-        resp.delete();
     }
 }

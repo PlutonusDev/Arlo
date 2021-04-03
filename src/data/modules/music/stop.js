@@ -23,15 +23,7 @@ module.exports = {
             }
         });
 
-        if(queue.player.state.status !== AudioPlayerStatus.Playing) return azure.replyTo(msg, {embed:{
-            author: {
-                name: "Music Queue",
-                icon_url: ""
-            },
-            description: `Please wait for the next song to start playing, ${msg.member.displayName}.`
-        }});
-
-        queue.songs = [];
-        queue.player.stop();
+        queue.queue = [];
+        queue.audioPlayer.stop();
     }
 }

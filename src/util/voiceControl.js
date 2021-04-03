@@ -63,7 +63,13 @@ module.exports = class voiceController {
             this.resource = createAudioResource(await ytdl(this.queue[0].url));
             this.play();
         } else {
-            console.log("destroy")
+            this.textChannel.send({embed:{
+                author: {
+                    name: "Queue Complete",
+                    icon_url: ""
+                },
+                description: "There's no more songs in the queue."
+            }})
             this.connection.destroy();
             this.ref.musicQueue.delete(this.textChannel.guild.id);
         }
