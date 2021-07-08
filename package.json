@@ -1,0 +1,10 @@
+{
+  "name": "arlo",
+  "version": "0.0.1",
+  "description": "A powerful, fully-featured Discord bot complete with an online webpanel.",
+  "main": "src/app.js",
+  "repository": "https://github.com/PlutonusDev/Azure",
+  "author": "Plutonus",
+  "license": "GPL-3.0",
+  "private": false
+}
