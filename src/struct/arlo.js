@@ -52,7 +52,7 @@ class Arlo extends Client {
 		await fs.readdir(path.join(__dirname, "../events"), (e, events) => {
 			events.forEach(event => {
 				event = event.replace(/\.js$/i, "");
-				this.client.on(event, (data, ...args) => require(path.join(__dirname, "../events", event))(this, data, args));
+				this.on(event, (data, ...args) => require(path.join(__dirname, "../events", event))(this, data, args));
 			});
 		});
 
