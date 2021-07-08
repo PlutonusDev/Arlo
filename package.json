@@ -6,5 +6,8 @@
   "repository": "https://github.com/PlutonusDev/Azure",
   "author": "Plutonus",
   "license": "GPL-3.0",
-  "private": false
+  "private": false,
+  "dependencies": {
+    "discord.js": "^12.5.3"
+  }
 }
