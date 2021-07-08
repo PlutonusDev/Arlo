@@ -1,3 +1,4 @@
 module.exports = {
-	discord: require("./discord")
+	discord: require("./discord"),
+	database: require("./database")
 }
