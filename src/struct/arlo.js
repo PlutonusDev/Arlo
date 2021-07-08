@@ -3,7 +3,7 @@ const path = require("path");
 const { Client, Intents, Collection } = require("discord.js");
 
 class Arlo extends Client {
-	constructor() {
+	constructor(db) {
 		super({
 			intents: [
 				Intents.FLAGS.GUILDS,
@@ -18,6 +18,7 @@ class Arlo extends Client {
 			}
 		});
 
+		this.db = db;
 		this.config = require(path.join(__dirname, "../config")).discord;
 		this.categories = [];
 		this.commands = new Collection();

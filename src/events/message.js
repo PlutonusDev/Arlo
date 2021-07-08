@@ -1,6 +1,6 @@
 module.exports = (arlo, msg) => {
 	if(msg.partial) msg.fetch();
-	if(!msg.content.startsWith(arlo.config.prefix) && !msg.content.startsWith(`<!@${arlo.user.id}>`)) return;
+	if(!msg.content.toLowerCase().startsWith(arlo.config.prefix) && !msg.content.match(new RegExp(`^<@!?${arlo.user.id}> `))) return;
 	if(msg.author.bot) return;
 
 	const command = msg.content.startsWith(arlo.config.prefix)
@@ -12,6 +12,7 @@ module.exports = (arlo, msg) => {
 	if(arlo.commands.has(command) || arlo.commands.find(c => c.file.aliases && c.file.aliases.includes(command))) {
 		const args = msg.content.slice(arlo.config.prefix.length).split(/ +/);
 		args.shift();
+		if(msg.content.match(new RegExp(`^<@!?${arlo.user.id}> `))) args.shift();
 		const cmd = arlo.commands.get(command) || arlo.commands.find(c => c.file.aliases && c.file.aliases.includes(command));
 
 		try {
