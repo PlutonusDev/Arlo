@@ -10,7 +10,7 @@ module.exports = (arlo, msg) => {
 	if(!command) return;
 
 	if(arlo.commands.has(command) || arlo.commands.find(c => c.file.aliases && c.file.aliases.includes(command))) {
-		const args = msg.content.slice(arlo.config.prefix.length).split(/ +/);
+		const args = msg.content.split(/ +/);
 		args.shift();
 		if(msg.content.match(new RegExp(`^<@!?${arlo.user.id}> `))) args.shift();
 		const cmd = arlo.commands.get(command) || arlo.commands.find(c => c.file.aliases && c.file.aliases.includes(command));
@@ -19,7 +19,7 @@ module.exports = (arlo, msg) => {
 
 		if(msg.channel.type === "dm" && cmd.module.guildOnly) return msg.reply("this command can only be used in a server.");
 
-		if(cmd.staffOnly && !msg.member.permissions.has(["KICK_MEMBERS", "BAN_MEMBERS", "MANAGE_GUILD"], true)) {
+		if(cmd.module.staffOnly && !msg.member.permissions.has(["KICK_MEMBERS", "BAN_MEMBERS", "MANAGE_GUILD"], true)) {
 			return msg.reply("you don't have permission to use this command.");
 		}
 
