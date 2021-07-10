@@ -10,7 +10,9 @@
 > This bot is brand-spanking new. In less than 100 servers and looking after about 10,000 members. But please be aware that it is still in early development, and may be unstable and incomplete.
 
 Arlo is an open source Discord bot that runs on the Node.JS runtime. Arlo utilises [Discord.js](https://discord.js.org) and [Mongoose](https://mongoosejs.com/docs/api.html). Any contributions or support (even a star!) mean a lot.
+
 ---
+
 ## Features
 
 ### Commands
@@ -28,7 +30,9 @@ Arlo has plenty of command modules to keep your server members busy, and a versa
 Arlo has it's very own online dashboard, offering (soon tm) a plethora of tools and features for anyone from guests to administrators to use.
 
 You can directly **manage your servers**, **modify your personal profile**, **manipulate the music queue**, and so much more!
+
 ---
+
 ## Installation
 
 ### Don't want to host it yourself?
@@ -42,11 +46,15 @@ View Arlo on [top.gg](https://top.gg/bot/791294502185861130) to add him.
 So, you'd like to run your very own version of Arlo? No worries! Don't worry, the process is fast and simple.
 
 Just follow the installation guide available on [the website](https://azure.plutonus.co/). (COMING SOON)
+
 ---
+
 ## Contributing
 
 Before **creating an issue**, please ensure that it hasn't already been reported / suggested, and double check the [F.A.Q](https://azure.plutonus.co) (COMING SOON). If you have a question, please ask it in the [Support Discord Server](https://discord.gg/FE5AvpBARk) instead of opening an issue. If you wish to contribute to the Arlo codebase or documentation, feel free to fork the [Repository](https://github.com/PlutonusDev/Arlo) and submit a pull request.
+
 ---
+
 ## Helpful Links
 
 *   [Commands List](https://azure.plutonus.co/commands)
@@ -54,7 +62,9 @@ Before **creating an issue**, please ensure that it hasn't already been reported
 *   [Frequently Asked Questions](https://azure.plutonus.co) (COMING SOON)
 *   [Support Discord](https://discord.gg/FE5AvpBARk)
 *   [Repository](https://github.com/PlutonusDev/Arlo)
+
 ---
+
 ## License
 
 Arlo is licensed under the GPL 3.0 license. See the `LICENSE` file for more information. If you plan to use any part of this source code in your own bot, I would be grateful if you would include some form of credit somewhere.
