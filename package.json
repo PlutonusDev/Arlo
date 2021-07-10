@@ -15,7 +15,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "discord.js": "^12.5.3",
+    "discord.js": "^13.0.0-dev.d6c43a5.1625875428",
     "express": "^4.17.1",
     "mongoose": "^5.13.2",
     "next": "^11.0.1",
