@@ -2,8 +2,15 @@
 const Database = require("./struct/database");
 const db = new Database();
 
-// Create the discord bot, referencing the database
+// Create the discord bot, and reference the database
 const Arlo = require("./struct/arlo");
-const client = new Arlo(db);
+const client = new Arlo();
+client.db = db;
 
-client.start().then(() => console.log("Ready!"));
+// Create the backend webservice, and reference the database
+const Backend = require("./struct/backend");
+const api = new Backend();
+api.db = db;
+
+client.start().then(() => console.log("Discord ready!"));
+api.start().then(() => console.log("Backend ready!"));
