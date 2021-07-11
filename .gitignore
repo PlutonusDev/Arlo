@@ -1,5 +1,7 @@
 # Configs
 src/config/discord.js
+src/config/database.js
+src/config/backend.js
 
 # Logs
 logs
