@@ -31,7 +31,7 @@ export interface SEOProps {
 	lang?: string,
 	meta?: any[];
 	keywords?: string[];
-	title: string;
+	title?: string;
 }
 
 SEO.defaultProps = {
