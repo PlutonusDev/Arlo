@@ -10,11 +10,6 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 	const trigger = useRef(null);
 	const sidebar = useRef(null);
 
-	const handleNavigation = (e) => {
-		e.preventDefault();
-		router.push(href);
-	}
-
 	useEffect(() => {
 		const clickHandler = ({ target }) => {
 			if(!sidebar.current || !trigger.current) return;
@@ -28,7 +23,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
 	useEffect(() => {
 		const keyHandler = ({ keyCode }) => {
-			if(!sidebarOpen || key !== 27) return;
+			if(!sidebarOpen || keyCode !== 27) return;
 			setSidebarOpen(false);
 		}
 		document.addEventListener("keydown", keyHandler);
