@@ -1,9 +1,11 @@
-import Test from "./Test";
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function ArloApp() {
-	return (
-		<div className="App">
-			<Test />
-		</div>
-	);
+	const router = useRouter();
+
+	useEffect(() => {
+		if(router.asPath === "/") router.push("/home");
+	}), [];
+	return <div />;
 }
