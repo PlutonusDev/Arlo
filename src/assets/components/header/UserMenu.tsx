@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
-import Transition from "../Transition";
 
 function UserMenu() {
 	const [ session, loading ] = useSession();
@@ -50,15 +49,7 @@ function UserMenu() {
 			</button>
 
 			{session && <>
-				<Transition show={dropdownOpen}
-					className="origin-top-right z-10 absolute top-full right-0 min-w-64 bg-gray-700 border-gray-200 py-1.5 rounded shadow-lg overflow-hidden mt-1"
-					enter="transition ease-out duration-200 transform"
-					enterStart="opacity-0 -translate-y-2"
-					enterEnd="opacity-100 translate-y-0"
-					leave="transition ease-out duration-200"
-					leaveStart="opacity-100"
-					leaveEnd="opacity-0"
-				>
+				<div className={`origin-top-right z-10 absolute top-full right-0 m-w-64 bg-gray-700 border-gray-200 py-1.5 rounded shadow-lg overflow-hidden mt-1 ${dropdownOpen ? "block" : "hidden"}`}>
 					<div ref={dropdown}
 						onFocus={() => setDropdownOpen(true)}
 						onBlur={() => setDropdownOpen(false)}
@@ -81,7 +72,7 @@ function UserMenu() {
 							</li>
 						</ul>
 					</div>
-				</Transition>
+				</div>
 			</>}
 		</div>
 	);
