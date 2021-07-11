@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "dev": "concurrently 'next dev -p 80' 'nodemon ./'",
-    "start": "concurrently 'pm2 next start' 'pm2 yarn ./'",
+    "start": "pm2 start",
     "build": "next build",
     "lint": "next lint"
   },
