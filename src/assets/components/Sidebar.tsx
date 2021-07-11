@@ -79,6 +79,17 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 								<span className="text-sm font-medium">Invite Arlo!</span>
 							</div>
 						</NavLink>
+						<NavLink href="/commands">
+							<div className="flex flex-grow">
+								<svg className="flex-shrink-0 h-6 w-6 mr-3" viewBox="0 0 24 24">
+									<path className="fill-current text-indigo-500" d="M19.714 14.7l-7.007 7.007-1.414-1.414 7.007-7.007c-.195-.4-.298-.84-.3-1.286a3 3 0 113 3 2.969 2.969 0 01-1.286-.3z" />
+									<path className="fill-current text-indigo-300" d="M10.714 18.3c.4-.195.84-.298 1.286-.3a3 3 0 11-3 3c.002-.446.105-.885.3-1.286l-6.007-6.007 1.414-1.414 6.007 6.007z" />
+									<path className="fill-current text-indigo-500" d="M5.7 10.714c.195.4.298.84.3 1.286a3 3 0 11-3-3c.446.002.885.105 1.286.3l7.007-7.007 1.414 1.414L5.7 10.714z" />
+									<path className="fill-current text-indigo-300" d="M19.707 9.292a3.012 3.012 0 00-1.415 1.415L13.286 5.7c-.4.195-.84.298-1.286.3a3 3 0 113-3 2.969 2.969 0 01-.3 1.286l5.007 5.006z" />
+								</svg>
+								<span className="text-sm font-medium">Commands List</span>
+							</div>
+						</NavLink>
 						<NavLink href="https://status.arlo.gg/">
 							<div className="flex flex-grow">
 								<svg className="flex-shrink-0 h-6 w-6 mr-3" viewBox="0 0 24 24">
@@ -105,6 +116,16 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 									<path className="fill-current text-indigo-500" d="M13 15.047V24l10.573-7.181A.999.999 0 0024 16V8l-11 7.047z" />
 								</svg>
 								<span className="text-sm font-medium">Host your own Arlo</span>
+							</div>
+						</NavLink>
+						<NavLink href="/faq">
+							<div className="flex flex-grow">
+								<svg className="flex-shrink-0 h-6 w-6 mr-3" viewBox="0 0 24 24">
+									<path className="fill-current text-indigo-500" d="M8 1v2H3v19h18V3h-5V1h7v23H1V1z" />
+									<path className="fill-current text-indigo-500" d="M1 1h22v23H1z" />
+									<path className="fill-current text-indigo-300" d="M15 10.586L16.414 12 11 17.414 7.586 14 9 12.586l2 2zM5 0h14v4H5z" />
+								</svg>
+								<span className="text-sm font-medium">FAQ</span>
 							</div>
 						</NavLink>
 					</ul>
