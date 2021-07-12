@@ -20,12 +20,12 @@ module.exports = (arlo, msg) => {
 		if(msg.channel.type === "dm" && cmd.module.guildOnly) return msg.reply("this command can only be used in a server.");
 
 		if(cmd.module.staffOnly && !msg.member.permissions.has(["KICK_MEMBERS", "BAN_MEMBERS", "MANAGE_GUILD"], true)) {
-			return msg.reply("you don't have permission to use this command.");
+			return msg.reply("You don't have permission to use this command!").then(m => m.delete({timeout:10000}));
 		}
 
 		if(msg.channel.type !== "dm") {
 			if(cmd.module.permissions && !cmd.module.permissions.every(perm => msg.channel.permissionsFor(arlo.user).has(perm))) {
-				return msg.reply(`I'm missing the following permissions:\n\n-${cmd.module.permissions.filter(perm => !msg.channel.permissionsFor(arlo.user).has(perm)).join("\n- ")}`);
+				return msg.reply(`I'm missing the following permissions:\n\n-${cmd.module.permissions.filter(perm => !msg.channel.permissionsFor(arlo.user).has(perm)).join("\n- ")}`).then(m => m.delete({timeout:10000}));
 			}
 		}
 
