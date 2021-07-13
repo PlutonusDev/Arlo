@@ -37,7 +37,7 @@ module.exports = class Discord extends EventEmitter {
         if (typeof content === "string") {
             api.data.content = content;
         } else {
-            api.data.embed = content.embed;
+            api.data = content;
         }
 
         return await message.channel.send(api);
