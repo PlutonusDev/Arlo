@@ -25,7 +25,7 @@ module.exports = (arlo, msg) => {
 
 		if(msg.channel.type !== "dm") {
 			if(cmd.module.permissions && !cmd.module.permissions.every(perm => msg.channel.permissionsFor(arlo.user).has(perm))) {
-				return msg.reply(`I'm missing the following permissions:\n\n-${cmd.module.permissions.filter(perm => !msg.channel.permissionsFor(arlo.user).has(perm)).join("\n- ")}`).then(m => m.delete({timeout:10000}));
+				return msg.reply(`I'm missing the following permissions:\n\n- ${cmd.module.permissions.filter(perm => !msg.channel.permissionsFor(arlo.user).has(perm)).join("\n- ")}`).then(m => m.delete({timeout:10000}));
 			}
 		}
 

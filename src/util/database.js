@@ -32,7 +32,7 @@ const schemas = {
 }
 
 const models = {
-	User: mongoose.model("User", schemas.User, "users"),
+	//User: mongoose.model("User", schemas.User, "users"),
 	Guild: mongoose.model("Guild", schemas.Guild, "guilds")
 }
 
