@@ -22,6 +22,7 @@ class Arlo extends Client {
 		this.config = require(path.join(__dirname, "../config")).discord;
 		this.categories = [];
 		this.commands = new Collection();
+		this.musicQueue = new Map();
 
 		return this;
 	}
