@@ -25,7 +25,7 @@ export async function getServerSideProps(context) {
 	}
 }
 
-async function makeReq() {
+/*async function makeReq() {
 	return new Promise(res => {
 		axios({
 			url: "http://204.44.81.167:3001/test",
@@ -36,7 +36,7 @@ async function makeReq() {
 			return res(JSON.stringify(e));
 		});
 	});
-}
+}*/
 
 export default function GuildSettingsPage({ guild }) {
 	const [ session, loading ] = useSession();
@@ -44,10 +44,10 @@ export default function GuildSettingsPage({ guild }) {
 	const router = useRouter();
 	const { guildId } = router.query;
 
-	useEffect(async () => {
+	/*useEffect(async () => {
 		const test = await makeReq();
 		setSettings({hello:test})
-	}, []);
+	}, []);*/
 
 	const updateSetting = async (property, setting) => {
 		//const data = await fetch("http://204.44.81.167:3001/test");
@@ -79,8 +79,8 @@ export default function GuildSettingsPage({ guild }) {
 
 	return (
 		<Layout title={guild.name}>
-			<p className="text-white text-lg">{guild.name} {guild.id} - {settings.hello || "Waiting..."}</p><br/>
-			<button onClick={() => updateSetting("test", "onetwothree")}>Click me</button>
+			<p className="text-white text-lg">{guild.name} {guild.id}</p><br/>
+			<button className="hidden" onClick={() => updateSetting("test", "onetwothree")}>Click me</button>
 		</Layout>
 	);
 }
