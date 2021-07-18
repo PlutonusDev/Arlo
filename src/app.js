@@ -11,6 +11,7 @@ client.db = db;
 const Backend = require("./struct/backend");
 const api = new Backend();
 api.db = db;
+api.bot = client;
 
 client.start().then(() => console.log("Discord ready!"));
 api.start().then(() => console.log("Backend ready!"));
