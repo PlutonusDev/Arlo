@@ -8,17 +8,17 @@ export default NextAuth({
 		Providers.Discord({
 			scope: "identify email guilds",
 			clientId: discord.oAuth2.ClientID,
-			clientSecret: discord.oAuth2.ClientSecret
+			clientSecret: discord.oAuth2.ClientSecret,
+
+			callbacks: {
+				session: async (session, user) => {
+					session.user.id = user.id;
+					console.log(user);
+					return Promise.resolve(session);
+				}
+			}
 		})
 	],
 
-	callbacks: {
-		session: (session, user) => {
-			session.user.id = user.id;
-			return session;
-		}
-	},
-
-	database: database.address,
-	secret: "test"
+	database: database.address
 });
