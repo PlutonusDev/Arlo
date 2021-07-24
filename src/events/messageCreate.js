@@ -9,11 +9,11 @@ module.exports = (arlo, msg) => {
 
 	if(!command) return;
 
-	if(arlo.commands.has(command) || arlo.commands.find(c => c.file.aliases && c.file.aliases.includes(command))) {
+	if(arlo.commands.has(command) || arlo.commands.find(c => c.module.aliases && c.module.aliases.includes(command))) {
 		const args = msg.content.split(/ +/);
 		args.shift();
 		if(msg.content.match(new RegExp(`^<@!?${arlo.user.id}> `))) args.shift();
-		const cmd = arlo.commands.get(command) || arlo.commands.find(c => c.file.aliases && c.file.aliases.includes(command));
+		const cmd = arlo.commands.get(command) || arlo.commands.find(c => c.module.aliases && c.module.aliases.includes(command));
 
 		if(cmd.module.disabled) return;
 
@@ -35,5 +35,5 @@ module.exports = (arlo, msg) => {
 			msg.reply("something went wrong!");
 			console.error(e);
 		}
-	} else return;
+	}
 }
