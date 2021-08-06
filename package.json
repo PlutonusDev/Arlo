@@ -27,7 +27,7 @@
     "discord.js": "^13.0.0-dev.d6c43a5.1625875428",
     "express": "^4.17.1",
     "moment": "^2.29.1",
-    "mongoose": "^5.13.2",
+    "mongoose": "^5.13.3",
     "next": "^11.0.1",
     "next-auth": "^3.27.3",
     "react": "^17.0.2",
