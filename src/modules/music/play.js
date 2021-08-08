@@ -18,10 +18,15 @@ module.exports = {
 		const queue = arlo.musicQueue.get(msg.guild.id);
 		let song;
 		if(urlPattern.test(args[0])) {
-			const songInfo = ytdl.getInfo(args[0].replace(/<(.+)>/g, "$1"));
+			const songMeta = await youtube.getVideo(args[0].replace(/<(.+)>/g, "$1"));
+			if(songMeta.durationSeconds > 5*60) return msg.reply({embeds:[{
+				description: "Sorry, that song is over 5 minutes long. Try something else."
+			}]});
+			const songInfo = await ytdl.getInfo(args[0].replace(/<(.+)>/g, "$1"));
 			song = {
 				title: songInfo.videoDetails.title.replace("\\", "\\\\").replace("*", "\\*").replace("_", "\\_").replace("~", "\\~"),
-				url: songInfo.videoDetails.video_url
+				url: songInfo.videoDetails.video_url,
+				duration: songMeta.durationSeconds * 1000
 			}
 		} else {
 			const youtube = new YouTubeAPI(arlo.config.tokens.youtube);
@@ -29,10 +34,18 @@ module.exports = {
 				console.error(e);
 				return msg.reply("I can't search YouTube right now, sorry.\n\nTry using a URL instead of search terms.");
 			});
-			const songInfo = await ytdl.getInfo(results[0].url);
+			const songMeta = await youtube.getVideo(results[0].url);
+			if(songMeta.durationSeconds > 5*60) return msg.reply({embeds:[{
+				description: "Sorry, that song is over 5 minutes long. Try something else."
+			}]});
+			const songInfo = await ytdl.getInfo(results[0].url).catch(()=>{});
+			if(!songInfo || !songInfo.videoDetails) return msg.reply({embeds:[{
+				description: "I can't find any music with those search terms. Change them and try again."
+			}]});
 			song = {
 				title: songInfo.videoDetails.title.replace("\\", "\\\\").replace("*", "\\*").replace("_", "\\_").replace("~", "\\~"),
-				url: songInfo.videoDetails.video_url
+				url: songInfo.videoDetails.video_url,
+				duration: songMeta.durationSeconds * 1000
 			}
 		}
 

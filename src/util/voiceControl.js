@@ -1,6 +1,6 @@
 const { createDiscordJSAdapter } = require("./voiceAdapter");
-const { joinVoiceChannel, createAudioResource, createAudioPlayer, AudioPlayerStatus } = require("@discordjs/voice");
-const ytdl = require("ytdl-core-discord");
+const { joinVoiceChannel, createAudioResource, createAudioPlayer, AudioPlayerStatus, demuxProbe } = require("@discordjs/voice");
+const ytdl = require("ytdl-core-discord"); //"ytdl-core-discord""youtube-dl-exec"
 
 module.exports = class voiceController {
 	constructor(data) {
@@ -55,8 +55,42 @@ module.exports = class voiceController {
 	async update() {
 		if(this.audioPlayer.state.status === AudioPlayerStatus.Playing) return;
 		if(this.queue[0]) {
-			this.resource = createAudioResource(await ytdl(this.queue[0].url));
+			this.resource = createAudioResource(await ytdl(this.queue[0].url, {
+				filter: "audioonly",
+				quality: "highestaudio",
+				highWaterMark: 1048576 * 32
+			}));
 			this.play();
+
+			//this.resource = createAudioResource();
+			/*const process = require("child_process").spawn("youtube-dl", [
+				this.queue[0].url,
+				"-o -",
+				"-q",
+				"-f bestaudio[ext=webm+acodec=opus+asr=48000]/bestaudio",
+				"-r 100K"
+			], {
+				stdio: ["ignore", "pipe", "ignore"]
+			});
+			if(!process.stdout) return this.textChannel.send({embeds:[{
+				description: "Something went wrong playing that song, try again.\n\nNo process.stdout"
+			}]});
+			const stream = process.stdout;
+			process.once("spawn", async () => {
+				await require("util").promisify(setTimeout)(3000);
+				console.log(stream);
+				demuxProbe(stream).then(async probe => {
+					this.resource = await createAudioResource(probe.stream, { inputType: probe.type });
+					this.play();
+				})
+				.catch(err => {
+					if(!process.killed) process.kill();
+					stream.resume();
+					this.textChannel.send({embeds:[{
+						description: `Something went wrong playing that song, try again.\n\n\`\`\`${err.message}\n\`\`\``
+					}]});
+				});
+			});*/
 		} else {
 			this.textChannel.send({embeds:[{
 				description: "There's no more songs in the queue.",
