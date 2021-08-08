@@ -14,7 +14,7 @@
     "not op_mini all"
   ],
   "scripts": {
-    "dev": "concurrently 'next dev -p 80' 'nodemon ./'",
+    "dev": "concurrently 'next dev -p 8080' 'nodemon ./'",
     "start": "pm2 start",
     "build": "next build",
     "lint": "next lint"

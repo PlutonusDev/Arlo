@@ -7,7 +7,7 @@ module.exports = {
 		}, {
 			name: "arlo-site",
 			script: "npx",
-			args: "next start -p 80"
+			args: "next start -p 8080"
 		}
 	]
 }
