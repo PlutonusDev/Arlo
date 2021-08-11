@@ -1,5 +1,5 @@
 import React from "react";
-import { getSession, useSession } from "next-auth/client";
+import { getSession, useSession, signIn } from "next-auth/client";
 import axios from "axios";
 
 import Layout from "../assets/layouts";
@@ -7,24 +7,26 @@ import Layout from "../assets/layouts";
 export async function getServerSideProps(context) {
 	const session = await getSession(context);
 
-	if(!session) return { props: {} }
+	if(!session) return { props: {err:true} }
 
 	try {
 		const guilds = await axios({
 			url: `http://localhost:3001/users/${session.user.id}/guilds`,
 			method: "GET",
-		});
+		}).catch(()=>{});
 
-		return { props: { guilds: guilds.data.available, botMissing: guilds.data.unavailable } };
+		return { props: { err: guilds.data.err || false, guilds: guilds.data.available || [], botMissing: guilds.data.unavailable || [] } };
 	} catch {
-		context.res.statusCode = 307;
-		context.res.setHeader("Location", "/dashboard");
+		//context.res.statusCode = 307;
+		//context.res.setHeader("Location", "/dashboard");
 		return {props:{}};
 	}
 }
 
 export default function DashboardPage({ guilds, botMissing }) {
 	const [ session, loading ] = useSession();
+
+	if(guilds && guilds.err) return <img onError="signIn('discord')" />;
 
 	if(loading) return (
 		<Layout title="Dashboard">

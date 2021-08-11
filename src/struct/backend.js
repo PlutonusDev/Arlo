@@ -25,9 +25,10 @@ module.exports = class Backend {
 					headers: {
 						Authorization: `Bearer ${user.accessToken}`
 					}
-				});
+				}).catch(e=>console.log(e.message));
 
-				if(!guilds) return res.status(500).json({err:true,msg:"Internal server error."});
+				if(!guilds) return res.status(200).json({err:true,msg:"Internal server error."});
+				console.log("Guilds got");
 
 				let requests = [];
 				let available = [];
